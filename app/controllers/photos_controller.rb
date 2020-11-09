@@ -1,4 +1,5 @@
 class PhotosController < ApplicationController
+  skip_before_action(:force_sign_in, {:only => [:index]})
   def index
     @photos = Photo.all
     render({ :template => "photos/all_photos.html.erb"})
@@ -9,7 +10,7 @@ class PhotosController < ApplicationController
     image = params.fetch("input_image")
     caption = params.fetch("input_caption")
     photo = Photo.new
-    photo.owner_id = user_id
+    photo.owner_id = session[:user_id]
     photo.image = image
     photo.caption = caption
     photo.save
